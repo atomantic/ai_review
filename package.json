@@ -1,0 +1,33 @@
+{
+  "name": "ai_review",
+  "version": "1.0.0",
+  "description": "Demo repository for an 8-minute talk showcasing AI integration in development workflows, focusing on automated linting fixes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node src/index.js",
+    "format": "prettier --write src/ && eslint src/ --fix",
+    "lint:check": "eslint src/",
+    "lint:ai:claude": "echo 'AI fixing with Claude...' && echo 'Claude AI fixes would go here'",
+    "lint:ai:q": "echo 'AI fixing with alternative...' && echo 'Alternative AI fixes would go here'",
+    "lint": "npm run format && npm run lint:check || npm run lint:ai:claude"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atomantic/ai_review.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/atomantic/ai_review/issues"
+  },
+  "homepage": "https://github.com/atomantic/ai_review#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "eslint": "^9.34.0",
+    "eslint-plugin-complexity": "^1.0.2",
+    "prettier": "^3.6.2"
+  }
+}
