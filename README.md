@@ -11,7 +11,7 @@ Demonstrates how AI tools eliminate the traditional distinction between "warn" a
 1. **Live Coding**: Build JavaScript/Node.js components with complex logic
 2. **AI Linting**: Use CLI AI tools in non-interactive mode to fix complex issues
 3. **GitHub Integration**: Automated Copilot code review on push
-4. **OpenAI Codex**: Automated task completion
+4. **Amazon Q**: Automated AI task completion
 
 ## Key Message
 
@@ -47,13 +47,13 @@ ai_review/
 
 ### Phase 2: AI Linting (4 min)
 - Run `npm run lint` - show errors, automatically invokes AI fix
-- Demonstrate `npm run lint:ai:claude` and `npm run lint:ai:q` options
+- Demonstrate `npm run lint:ai:q` for Amazon Q AI fixing
 - Compare before/after: complexity → clean, readable code
 
 ### Phase 3: GitHub Workflow (2 min)
 - Push to GitHub
 - Show Copilot automated code review
-- OpenAI Codex handles remaining tasks
+- Amazon Q handles remaining tasks
 - Auto-merge when AI approves
 
 ## Setup
@@ -62,8 +62,7 @@ ai_review/
 npm install
 npm run dev              # For local testing
 npm run lint             # Smart linting - auto-invokes AI fix on errors
-npm run lint:ai:claude   # Use Claude for AI fixing
-npm run lint:ai:q        # Use alternative AI for fixing
+npm run lint:ai:q        # Use Amazon Q for AI fixing
 ```
 
 ## Implementation Steps
@@ -74,7 +73,7 @@ npm run lint:ai:q        # Use alternative AI for fixing
 - Configure ESLint with ALL rules as ERRORS (including cyclomatic complexity)
 
 **Step 2: AI Integration**
-- Add package.json scripts for AI linting (lint:ai:claude, lint:ai:q)
+- Add package.json script for AI linting (lint:ai:q)
 - Configure main lint script to auto-invoke AI fixing on errors
 - GitHub Actions with Copilot review
 - Test full pipeline locally
@@ -97,8 +96,7 @@ npm run lint:ai:q        # Use alternative AI for fixing
 2. **Package.json AI Scripts**:
    ```bash
    npm run lint             # Auto-invokes AI fix on errors
-   npm run lint:ai:claude   # Use Claude for fixing
-   npm run lint:ai:q        # Use alternative AI for fixing
+   npm run lint:ai:q        # Use Amazon Q for fixing
    ```
 
 3. **GitHub Workflow**:
