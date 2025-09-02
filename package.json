@@ -1,0 +1,32 @@
+{
+  "name": "ai_review",
+  "version": "1.0.0",
+  "description": "Demo repository for an 8-minute talk showcasing AI integration in development workflows, focusing on automated linting fixes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node src/index.js",
+    "format": "prettier --write src/ && eslint src/ --fix",
+    "lint:check": "eslint src/",
+    "lint:ai:q": "npm run lint:check 2>&1 | q chat --no-interactive 'Fix the following ESLint issues by modifying the source files directly. Focus on reducing cyclomatic complexity, removing code duplication, and addressing all linting warnings while preserving functionality:'",
+    "lint": "npm run format && npm run lint:check --fix || npm run lint:ai:q"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atomantic/ai_review.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/atomantic/ai_review/issues"
+  },
+  "homepage": "https://github.com/atomantic/ai_review#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "eslint": "^9.34.0",
+    "eslint-plugin-complexity": "^1.0.2",
+    "prettier": "^3.6.2"
+  }
+}
