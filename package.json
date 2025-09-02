@@ -8,8 +8,9 @@
     "dev": "node src/index.js",
     "format": "prettier --write src/ && eslint src/ --fix",
     "lint:check": "eslint src/",
-    "lint:ai:q": "npm run lint:check 2>&1 | q chat --no-interactive 'Fix the following ESLint issues by modifying the source files directly. Focus on reducing cyclomatic complexity, removing code duplication, and addressing all linting warnings while preserving functionality:'",
-    "lint": "npm run format && npm run lint:check --fix || npm run lint:ai:q"
+    "lint:fix": "eslint src/ --fix",
+    "lint:ai:q": "npm run lint:check 2>&1 | q chat --no-interactive --trust-all-tools 'Fix ALL ESLint errors and warnings by modifying the source files. Do not stop until every issue is resolved:'",
+    "lint": "npm run format && npm run lint:fix"
   },
   "repository": {
     "type": "git",
