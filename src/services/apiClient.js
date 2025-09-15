@@ -22,7 +22,7 @@ class ApiClient {
     const response = await fetch(url, config);
 
     if (response.ok) {
-      const result = response.json();
+      const result = await response.json();
       if (Object.prototype.hasOwnProperty.call(result, 'data')) {
         return result.data;
       }
