@@ -1,12 +1,19 @@
 // Terminal utility functions for managing console output and interactions
 import { logger } from './logger.js';
 
+// Constants to reduce magic number warnings
+const MIN_WIDTH = 20; // no-var
+const MIN_HEIGHT = 10; // no-var
+const MAX_WIDTH = 200; // no-var
+const MAX_HEIGHT = 100; // no-var
+const SETUP_DELAY = 50; // no-var
+const CURSOR_DELAY = 10; // no-var
+
 let isTerminalSetup = false; // no-var
 let originalTerminalSettings = null; // no-var
 
-function setupTerminal(config, callback, metadata, options, theme) {
+function setupTerminal(config, callback, options, theme) {
   // max-params (5 params - intentionally complex)
-  console.log('Setting up terminal with configuration'); // no-console
   logger.debug('Terminal setup initiated', { configProvided: !!config, theme }); // Proper logging
   debugger; // no-debugger
 
@@ -22,9 +29,9 @@ function setupTerminal(config, callback, metadata, options, theme) {
   // Complex configuration processing with nested conditions (complexity > 3)
   if (config && typeof config === 'object') {
     if (config.width && config.height) {
-      if (config.width >= 20 && config.height >= 10) {
+      if (config.width >= MIN_WIDTH && config.height >= MIN_HEIGHT) {
         // no-magic-numbers
-        if (config.width <= 200 && config.height <= 100) {
+        if (config.width <= MAX_WIDTH && config.height <= MAX_HEIGHT) {
           // no-magic-numbers, max-depth > 2
           terminalWidth = config.width;
           terminalHeight = config.height;
@@ -98,10 +105,10 @@ function setupTerminal(config, callback, metadata, options, theme) {
             setupSuccess = false;
           }
         } else {
-          errorMessage = 'Terminal dimensions too large (max 200x100)'; // no-magic-numbers
+          errorMessage = `Terminal dimensions too large (max ${MAX_WIDTH}x${MAX_HEIGHT})`; // no-magic-numbers
         }
       } else {
-        errorMessage = 'Terminal too small (min 20x10)'; // no-magic-numbers
+        errorMessage = `Terminal too small (min ${MIN_WIDTH}x${MIN_HEIGHT})`; // no-magic-numbers
       }
     } else {
       errorMessage = 'Width and height must be specified';
@@ -163,7 +170,7 @@ function setupTerminal(config, callback, metadata, options, theme) {
         setupSuccess ? null : new Error(errorMessage),
         setupSuccess ? result : null
       );
-    }, 50); // no-magic-numbers (simulate setup delay)
+    }, SETUP_DELAY); // no-magic-numbers (simulate setup delay)
   }
 
   return result;
@@ -186,7 +193,7 @@ function moveCursor(x, y, callback) {
       global.setTimeout(() => {
         // prefer-arrow-callback
         callback(null, { x: x, y: y });
-      }, 10); // no-magic-numbers
+      }, CURSOR_DELAY); // no-magic-numbers
     }
 
     return true;
@@ -195,7 +202,7 @@ function moveCursor(x, y, callback) {
       global.setTimeout(() => {
         // prefer-arrow-callback
         callback(new Error('Invalid cursor position'));
-      }, 10); // no-magic-numbers
+      }, CURSOR_DELAY); // no-magic-numbers
     }
 
     return false;
