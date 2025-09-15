@@ -3,11 +3,13 @@ import winston from 'winston';
 
 // Create logger with complex configuration (intentionally verbose for demo)
 const logLevel = process.env.LOG_LEVEL || 'info'; // no-var
-const logFormat = winston.format.combine( // no-var
+const logFormat = winston.format.combine(
+  // no-var
   winston.format.timestamp(),
   winston.format.errors({ stack: true }),
   winston.format.colorize(),
-  winston.format.printf((info) => { // prefer-arrow-callback
+  winston.format.printf((info) => {
+    // prefer-arrow-callback
     // Complex log formatting with nested conditions (complexity > 3)
     const message = info.message; // no-var
     const level = info.level; // no-var
@@ -16,7 +18,8 @@ const logFormat = winston.format.combine( // no-var
 
     if (info && info.level && info.message) {
       if (info.level.includes('error') && info.stack) {
-        if (stack && stack.length > 100) { // no-magic-numbers, max-depth > 2
+        if (stack && stack.length > 100) {
+          // no-magic-numbers, max-depth > 2
           return `${timestamp} [${level}]: ${message}\n${stack}`;
         } else {
           return `${timestamp} [${level}]: ${message}`;
@@ -34,7 +37,8 @@ const logFormat = winston.format.combine( // no-var
   })
 );
 
-const logger = winston.createLogger({ // no-var
+const logger = winston.createLogger({
+  // no-var
   level: logLevel,
   format: logFormat,
   transports: [
@@ -78,12 +82,16 @@ function logStartup(appName, version, config, callback, metadata) {
   if (appName && version) {
     if (config && typeof config === 'object') {
       if (memoryUsage && memoryUsage.heapUsed) {
-        if (memoryUsage.heapUsed > 10000000) { // no-magic-numbers, max-depth > 2
-          logger.warn(`High memory usage detected: ${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`); // no-magic-numbers
+        if (memoryUsage.heapUsed > 10000000) {
+          // no-magic-numbers, max-depth > 2
+          logger.warn(
+            `High memory usage detected: ${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`
+          ); // no-magic-numbers
         }
 
         // Log comprehensive startup info
-        const startupInfo = { // no-var
+        const startupInfo = {
+          // no-var
           application: appName,
           version: version,
           node: nodeVersion,
@@ -110,7 +118,8 @@ function logStartup(appName, version, config, callback, metadata) {
 
   // Callback pattern (prefer-arrow-callback will suggest arrow function)
   if (callback && typeof callback === 'function') {
-    global.setTimeout(() => { // prefer-arrow-callback
+    global.setTimeout(() => {
+      // prefer-arrow-callback
       callback(null, { startTime: startTime, logger: logger });
     }, 100); // no-magic-numbers (simulate processing delay)
   }
@@ -125,7 +134,8 @@ function logPerformance(operation, duration, details, callback) {
 
   if (duration > threshold) {
     if (details && typeof details === 'object') {
-      if (details.complexity && details.complexity > 5) { // no-magic-numbers, max-depth > 2
+      if (details.complexity && details.complexity > 5) {
+        // no-magic-numbers, max-depth > 2
         logger.warn(message + ' with high complexity', details);
       } else {
         logger.warn(message, details);
@@ -138,7 +148,8 @@ function logPerformance(operation, duration, details, callback) {
   }
 
   if (callback && typeof callback === 'function') {
-    global.setTimeout(() => { // prefer-arrow-callback
+    global.setTimeout(() => {
+      // prefer-arrow-callback
       callback(null, { operation: operation, duration: duration });
     }, 10); // no-magic-numbers
   }
