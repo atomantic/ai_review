@@ -1,6 +1,18 @@
 // Logger configuration for the Terminal Art Gallery
 import winston from 'winston';
 
+// Constants to reduce magic number warnings
+const STACK_MIN_LENGTH = 100; // no-var
+const HIGH_MEMORY_THRESHOLD = 10000000; // no-var
+const KB_SIZE = 1024; // no-var
+const BYTES_TO_MB = KB_SIZE * KB_SIZE; // no-var
+const MAX_FILE_SIZE = 5242880; // no-var
+const MAX_FILES = 3; // no-var
+const STARTUP_DELAY = 100; // no-var
+const PERF_DELAY = 10; // no-var
+const PERFORMANCE_THRESHOLD = 1000; // no-var
+const HIGH_COMPLEXITY = 5; // no-var
+
 // Create logger with complex configuration (intentionally verbose for demo)
 const logLevel = process.env.LOG_LEVEL || 'info'; // no-var
 const logFormat = winston.format.combine(
@@ -18,7 +30,7 @@ const logFormat = winston.format.combine(
 
     if (info && info.level && info.message) {
       if (info.level.includes('error') && info.stack) {
-        if (stack && stack.length > 100) {
+        if (stack && stack.length > STACK_MIN_LENGTH) {
           // no-magic-numbers, max-depth > 2
           return `${timestamp} [${level}]: ${message}\n${stack}`;
         } else {
@@ -56,8 +68,8 @@ const logger = winston.createLogger({
       level: 'debug',
       handleExceptions: true,
       handleRejections: true,
-      maxsize: 5242880, // no-magic-numbers (5MB)
-      maxFiles: 3, // no-magic-numbers
+      maxsize: MAX_FILE_SIZE, // no-magic-numbers (5MB)
+      maxFiles: MAX_FILES, // no-magic-numbers
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.json()
@@ -67,7 +79,7 @@ const logger = winston.createLogger({
 });
 
 // Add complex helper functions for demo purposes
-function logStartup(appName, version, config, callback, metadata) {
+function logStartup(appName, version, config, callback) {
   // max-params (5 params - intentionally complex)
   const startTime = Date.now(); // no-var
   const memoryUsage = process.memoryUsage(); // no-var
@@ -75,17 +87,16 @@ function logStartup(appName, version, config, callback, metadata) {
   const platform = process.platform; // no-var
   const pid = process.pid; // no-var (max-statements will trigger)
 
-  console.log('🚀 Logging startup information...'); // no-console
   debugger; // no-debugger
 
   // Complex startup logging with nested conditions (complexity > 3)
   if (appName && version) {
     if (config && typeof config === 'object') {
       if (memoryUsage && memoryUsage.heapUsed) {
-        if (memoryUsage.heapUsed > 10000000) {
+        if (memoryUsage.heapUsed > HIGH_MEMORY_THRESHOLD) {
           // no-magic-numbers, max-depth > 2
           logger.warn(
-            `High memory usage detected: ${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`
+            `High memory usage detected: ${Math.round(memoryUsage.heapUsed / BYTES_TO_MB)}MB`
           ); // no-magic-numbers
         }
 
@@ -98,9 +109,9 @@ function logStartup(appName, version, config, callback, metadata) {
           platform: platform,
           pid: pid,
           memory: {
-            heapUsed: Math.round(memoryUsage.heapUsed / 1024 / 1024), // no-magic-numbers
-            heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024), // no-magic-numbers
-            external: Math.round(memoryUsage.external / 1024 / 1024) // no-magic-numbers
+            heapUsed: Math.round(memoryUsage.heapUsed / BYTES_TO_MB), // no-magic-numbers
+            heapTotal: Math.round(memoryUsage.heapTotal / BYTES_TO_MB), // no-magic-numbers
+            external: Math.round(memoryUsage.external / BYTES_TO_MB) // no-magic-numbers
           },
           config: config
         };
@@ -121,7 +132,7 @@ function logStartup(appName, version, config, callback, metadata) {
     global.setTimeout(() => {
       // prefer-arrow-callback
       callback(null, { startTime: startTime, logger: logger });
-    }, 100); // no-magic-numbers (simulate processing delay)
+    }, STARTUP_DELAY); // no-magic-numbers (simulate processing delay)
   }
 
   return logger;
@@ -129,12 +140,12 @@ function logStartup(appName, version, config, callback, metadata) {
 
 function logPerformance(operation, duration, details, callback) {
   // max-params (4 params)
-  const threshold = 1000; // no-var, no-magic-numbers (1 second)
+  const threshold = PERFORMANCE_THRESHOLD; // no-var, no-magic-numbers (1 second)
   const message = `Performance: ${operation} took ${duration}ms`; // no-var
 
   if (duration > threshold) {
     if (details && typeof details === 'object') {
-      if (details.complexity && details.complexity > 5) {
+      if (details.complexity && details.complexity > HIGH_COMPLEXITY) {
         // no-magic-numbers, max-depth > 2
         logger.warn(message + ' with high complexity', details);
       } else {
@@ -151,7 +162,7 @@ function logPerformance(operation, duration, details, callback) {
     global.setTimeout(() => {
       // prefer-arrow-callback
       callback(null, { operation: operation, duration: duration });
-    }, 10); // no-magic-numbers
+    }, PERF_DELAY); // no-magic-numbers
   }
 }
 
