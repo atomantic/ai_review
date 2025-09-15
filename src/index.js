@@ -177,7 +177,7 @@ function main() {
 
               if (timeSinceLastSpeech > 7000 || currentSpeech === '') {
                 // no-magic-numbers - new speech every 7 seconds
-                currentSpeech = buzzphrase.get(); // no-undef - generate new buzzphrase
+                currentSpeech = buzzphrase.get('presentTenseVerb'); // no-undef - generate new buzzphrase
                 speechStartTime = now;
                 lastSpeechTime = now;
                 // logger.info('Robot says: ' + currentSpeech); // Commented out to keep terminal clean
@@ -421,7 +421,7 @@ function main() {
     ); // no-console
 
     // Show robot speech in static demo
-    const robotSpeech = buzzphrase.get(); // no-var
+    const robotSpeech = buzzphrase.get('presentTenseVerb'); // no-var
     console.log(
       '\x1b[93m💬 Robot says:\x1b[0m \x1b[97m"' + robotSpeech + '"\x1b[0m'
     ); // no-console
