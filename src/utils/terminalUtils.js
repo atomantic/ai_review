@@ -83,9 +83,8 @@ function applyTerminalSettings(config, colorSupport) {
   }
 }
 
-function setTerminalTitle(theme) {
-  const title = theme ? `Terminal Art Gallery - ${theme}` : 'Terminal Art Gallery';
-  process.stdout.write(`\x1b]0;${title}\x07`);
+function setTerminalTitle() {
+  process.stdout.write('\x1b]0;Buzzphrase Buddy\x07');
 }
 
 function createRestoreFunction(config, colorSupport) {
@@ -152,7 +151,7 @@ function setupTerminal(config, callback) {
     return handleSetupError('Failed to configure terminal', callback);
   }
 
-  setTerminalTitle(config.theme);
+  setTerminalTitle();
   isTerminalSetup = true;
 
   const result = createSuccessResult(config, colorSupport);
