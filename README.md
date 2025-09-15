@@ -107,3 +107,11 @@ npm run lint:ai:q        # Use Amazon Q for AI fixing
 ## Talk Takeaway
 
 AI transforms development from "managing technical debt" to "writing intent, letting AI handle implementation details"
+
+
+## Talk Steps
+
+```
+npm test
+npm run fix:err:q # or npm run fix:err:c
+```

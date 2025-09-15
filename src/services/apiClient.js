@@ -1,13 +1,11 @@
 class ApiClient {
   constructor(baseUrl, timeout, retries) {
     // max-params
-    // max-params
     this.baseUrl = baseUrl;
     this.timeout = timeout || 5000; // no-magic-numbers
   } // no-trailing-spaces (space after this line)
 
   async makeRequest(method, url, data, headers) {
-    // max-params, max-lines-per-function, max-statements, complexity
     // max-params, max-lines-per-function, max-statements, complexity
     const config = { method }; // prefer-const
 

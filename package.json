@@ -4,12 +4,15 @@
   "description": "Demo repository for an 8-minute talk showcasing AI integration in development workflows, focusing on automated linting fixes.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run lint:check",
     "dev": "node src/index.js",
     "format": "prettier --write src/ && eslint src/ --fix",
     "lint:check": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "lint:ai:q": "npm run lint:check 2>&1 | q chat --no-interactive --trust-all-tools 'Fix ALL ESLint errors and warnings by modifying the source files. Do not stop until every issue is resolved:'",
+    "fix:all:q": "npm run lint:check 2>&1 | q chat --no-interactive --trust-all-tools 'Fix ALL ESLint errors and warnings by modifying the source files. Do not stop until every issue is resolved, then create a branch, commit, push and open a PR:'",
+    "fix:all:c": "npm run lint:check 2>&1 | claude --dangerously-skip-permissions -p 'Fix ALL ESLint errors and warnings by modifying the source files. Do not stop until every error detected by npm test is resolved, then create a branch, commit, push and open a PR:'",
+    "fix:err:c": "npm run lint:check 2>&1 | claude --dangerously-skip-permissions -p 'Fix ALL ESLint errors by modifying the source files. Do not stop until every error detected by npm test is resolved. Only fix the errors, not the warnings, then create a branch, commit, push and open a PR:'",
+    "fix:err:q": "npm run lint:check 2>&1 | q chat --no-interactive --trust-all-tools 'Fix ALL ESLint errors by modifying the source files. Do not stop until every error detected by npm test is resolved. Only fix the errors, not the warnings, then create a branch, commit, push and open a PR:'",
     "lint": "npm run format && npm run lint:fix"
   },
   "repository": {
