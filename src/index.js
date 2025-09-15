@@ -177,7 +177,7 @@ function main() {
 
               if (timeSinceLastSpeech > 7000 || currentSpeech === '') {
                 // no-magic-numbers - new speech every 7 seconds
-                currentSpeech = buzzphrase.get({ format: '{V} {a} {N}' }); // no-undef - generate new buzzphrase
+                currentSpeech = buzzphrase.get({ format: '{V} {a} {N}', iterations: 1 }); // no-undef - generate new buzzphrase
                 speechStartTime = now;
                 lastSpeechTime = now;
                 // logger.info('Robot says: ' + currentSpeech); // Commented out to keep terminal clean
