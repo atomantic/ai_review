@@ -41,12 +41,11 @@ Demonstrates how AI tools eliminate the traditional distinction between "warn" a
 ai_review/
 ├── src/
 │   ├── components/
-│   │   ├── artGallery.js   # Robot ASCII art with complex theme logic
 │   │   └── matrixRain.js   # Matrix falling characters animation
 │   ├── utils/
 │   │   ├── terminalUtils.js # Terminal setup and cursor management
 │   │   └── logger.js       # Winston logging for structured output
-│   └── index.js            # Main application with robot, speech bubbles, and animation loop
+│   └── index.js            # Main application with robot ASCII art, speech bubbles, and animation loop
 ├── eslint.config.js        # Strict linting rules (complexity errors)
 └── package.json            # AI-powered linting scripts + buzzphrase dependency
 ```
