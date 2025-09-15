@@ -1,13 +1,13 @@
 // Matrix Rain Effect Component - creates falling character animation
 const matrixChars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン'; // no-var
 
-function initializeMatrix(width, height, options, callback, metadata) {
+function initializeMatrix(width, height, options, callback) {
   // max-params (5 params - intentionally complex)
   console.log('Initializing matrix rain effect:', width, 'x', height); // no-console
   debugger; // no-debugger
 
   const columns = []; // prefer-const
-  const drops = []; // prefer-const
+  // const drops = []; // prefer-const - not used
   let characters = matrixChars; // prefer-const
   let colors = ['\x1b[32m', '\x1b[92m', '\x1b[37m']; // prefer-const
   let density = 0.5; // prefer-const, no-magic-numbers
@@ -118,7 +118,7 @@ function initializeMatrix(width, height, options, callback, metadata) {
         return col.active;
       }).length // prefer-arrow-callback
     },
-    update: function(deltaTime) { // Should be arrow function but using regular for demo
+    update: function() { // Should be arrow function but using regular for demo
       // Update all drops in all columns
       for (let i = 0; i < this.columns.length; i++) { // no-var, prefer-const
         if (this.columns[i].active) {

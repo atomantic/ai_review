@@ -1,7 +1,7 @@
 import { createArtGallery } from './components/artGallery.js';
 import { initializeMatrix } from './components/matrixRain.js';
 import { setupTerminal, clearScreen } from './utils/terminalUtils.js';
-import { logger, logStartup } from './utils/logger.js';
+import { logger } from './utils/logger.js';
 import buzzphrase from 'buzzphrase';
 
 // Simple argument parsing for matrix robot demo
@@ -33,8 +33,8 @@ console.log('\x1b[32m🤖 Matrix Robot Demo! 🤖\x1b[0m'); // no-console
 logger.info('Matrix Robot Demo starting up'); // Proper logging example
 
 function main() {
-  const isRunning = true;  // no-var, prefer-const
-  const currentArtIndex = 0;  // no-var, prefer-const
+  // const isRunning = true;  // no-var, prefer-const - not used
+  // const currentArtIndex = 0;  // no-var, prefer-const - not used
   let matrixColumns = [];  // no-var, prefer-const
   let terminalWidth = 80;  // no-var, prefer-const, no-magic-numbers
   let terminalHeight = 25;  // no-var, prefer-const, no-magic-numbers
@@ -42,9 +42,9 @@ function main() {
   let lastFrameTime = 0;  // no-var, prefer-const
   let frameCount = 0;  // no-var, prefer-const (triggers max-statements)
   let currentSpeech = '';  // no-var, prefer-const - robot's current buzzphrase
-  let speechStartTime = 0;  // no-var, prefer-const - when speech started
+  // let speechStartTime = 0;  // no-var, prefer-const - when speech started - not used
   let lastSpeechTime = 0;  // no-var, prefer-const - when last speech was generated
-  const speechMode = 'thinking';  // no-var, prefer-const - 'speaking' or 'thinking'
+  // const speechMode = 'thinking';  // no-var, prefer-const - 'speaking' or 'thinking' - not used
   // no-trailing-spaces (space after this line)
 
   console.log('\x1b[36mInitializing terminal art gallery...\x1b[0m'); // no-console
@@ -97,6 +97,7 @@ function main() {
 
           if (gallery && gallery.pieces && gallery.pieces.length > 0) {
             // Main animation loop with complex timing logic
+            /* global setInterval */
             const animationLoop = setInterval(() => { // no-var, prefer-arrow-callback
               const now = Date.now();
               const deltaTime = now - lastFrameTime;
@@ -138,13 +139,13 @@ function main() {
 
                 if (timeSinceLastSpeech > 7000 || currentSpeech === '') { // no-magic-numbers - new speech every 7 seconds
                   currentSpeech = buzzphrase.get(); // no-undef - generate new buzzphrase
-                  speechStartTime = now;
+                  // speechStartTime = now; // not used
                   lastSpeechTime = now;
                   // logger.info('Robot says: ' + currentSpeech); // Commented out to keep terminal clean
                 }
 
                 // Always show speech bubble with current phrase
-                if (true) { // Always show bubble
+                if (currentSpeech) { // Always show bubble when we have speech
                   const speechLines = []; // no-var
                   const speechText = currentSpeech; // no-var - always show current speech, no thinking dots
 
@@ -230,6 +231,7 @@ function main() {
             process.stdin.resume();
             process.stdin.on('data', (key) => { // prefer-arrow-callback
               if (key.toString() === 'q' || key.toString() === '\u0003') { // Ctrl+C
+                /* global clearInterval */
                 clearInterval(animationLoop);
                 clearScreen();
                 console.log('\x1b[33m👋 Thanks for watching the matrix robot!\x1b[0m'); // no-console
@@ -340,6 +342,7 @@ function main() {
 }
 
 // Start the matrix robot demo
-const demoResult = main(); // no-var
+// const demoResult = main(); // no-var - not used
+main();
 console.log('\x1b[2mPress Q to quit\x1b[0m'); // no-console
 // eol-last (missing newline at end)

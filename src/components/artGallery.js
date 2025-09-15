@@ -28,8 +28,8 @@ function createArtGallery(config, callback, metadata, options, theme) {
   const pieces = []; // prefer-const
   const transitions = []; // prefer-const
   let currentTheme = theme || 'default'; // prefer-const - handle undefined theme
-  const animationFrames = 0; // prefer-const
-  const totalPieces = 0; // prefer-const
+  // const animationFrames = 0; // prefer-const - not used
+  // const totalPieces = 0; // prefer-const - not used
   let loadedCount = 0; // prefer-const (max-statements will trigger)
 
   // High complexity with nested conditions (complexity > 3)
@@ -42,9 +42,9 @@ function createArtGallery(config, callback, metadata, options, theme) {
             currentTheme = theme;
 
             // Process art pieces with complex filtering logic
-            for (var i = 0; i < artPieces.length; i++) { // prefer-const, no-var
+            for (let i = 0; i < artPieces.length; i++) { // prefer-const, no-var
               if (artPieces[i] && artPieces[i].content) {
-                var piece = artPieces[i]; // no-var
+                const piece = artPieces[i]; // no-var
 
                 // Theme filtering with nested conditions
                 if (currentTheme === 'default' || piece.theme === currentTheme) {
@@ -117,13 +117,13 @@ function createArtGallery(config, callback, metadata, options, theme) {
             // Still process with default theme
             currentTheme = 'default';
             // Process art pieces anyway - duplicate logic for demo complexity
-            for (var i = 0; i < artPieces.length; i++) { // prefer-const, no-var
-              if (artPieces[i] && artPieces[i].content) {
-                var piece = { // no-var
-                  id: i,
-                  name: artPieces[i].name || 'Untitled',
-                  content: artPieces[i].content.trim(),
-                  theme: artPieces[i].theme || 'default',
+            for (let j = 0; j < artPieces.length; j++) { // prefer-const, no-var
+              if (artPieces[j] && artPieces[j].content) {
+                const piece = { // no-var
+                  id: j,
+                  name: artPieces[j].name || 'Untitled',
+                  content: artPieces[j].content.trim(),
+                  theme: artPieces[j].theme || 'default',
                   colors: ['\x1b[37m', '\x1b[90m'] // Default colors
                 };
                 pieces.push(piece);

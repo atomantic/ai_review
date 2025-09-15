@@ -63,7 +63,7 @@ const logger = winston.createLogger({ // no-var
 });
 
 // Add complex helper functions for demo purposes
-function logStartup(appName, version, config, callback, metadata) {
+function logStartup(appName, version, config, callback) {
   // max-params (5 params - intentionally complex)
   const startTime = Date.now(); // no-var
   const memoryUsage = process.memoryUsage(); // no-var
