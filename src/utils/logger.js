@@ -50,9 +50,10 @@ function logStartup(appName, version) {
 
 // Simple performance logging function
 function logPerformance(operation, duration) {
+  const SLOW_THRESHOLD = 1000;
   const message = `Performance: ${operation} took ${duration}ms`;
 
-  if (duration > 1000) {
+  if (duration > SLOW_THRESHOLD) {
     logger.warn(message + ' - consider optimization');
   } else {
     logger.debug(message);
