@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Matrix Robot Demo that showcases AI integration in development workflows through fun, interactive terminal animations. The project features an animated ASCII robot with Matrix-style falling characters, tech buzzphrase speech bubbles, complex animation timing, and color effects. The codebase is intentionally complex with deep nesting, magic numbers, and high cyclomatic complexity to demonstrate how AI tools can refactor sophisticated animation logic into clean, maintainable code.
+This is a Buzzphrase Buddy Matrix Robot Demo that showcases AI integration in development workflows through fun, interactive terminal animations. The project features an animated ASCII robot with Matrix-style falling characters, tech buzzphrase speech bubbles, complex animation timing, and color effects. The codebase demonstrates how AI tools can refactor sophisticated animation logic into clean, maintainable code.
 
 ## Core Architecture
 
@@ -53,11 +53,11 @@ The project uses a strategic ESLint configuration that demonstrates the AI-enhan
 - **Traditional "Easy" Fixes as ERRORS**: Syntax, formatting, basic code issues that were traditionally easy to fix manually
 - **Complex Issues as WARNINGS**: Cyclomatic complexity, code depth, function length, etc. - issues that traditionally required human effort but AI can now handle easily
 
-Key complexity rules (set to very low thresholds for demo purposes):
-- `complexity`: max 3
-- `max-depth`: max 2
-- `max-statements`: max 5
-- `max-lines-per-function`: max 10
+Key complexity rules (set to reasonable industry standards):
+- `complexity`: max 10
+- `max-depth`: max 4
+- `max-statements`: max 15
+- `max-lines-per-function`: max 200
 
 ## AI Integration Patterns
 
@@ -83,7 +83,6 @@ The codebase intentionally includes complex patterns that demonstrate AI's refac
 - **Nested Animation Loops**: 4+ levels of nesting in render functions
 - **Complex Timing Logic**: Frame rate calculations with magic numbers
 - **Multi-layered Rendering**: Matrix background + ASCII art with collision detection
-- **Theme-based Color Systems**: Conditional color assignment with nested switch statements
 - **Interactive Input Handling**: Raw terminal input processing with complex key mapping
 
 When working with this codebase, remember that the intentionally complex animation code and strict linting rules are part of the demo - the goal is to show how AI can handle sophisticated refactoring of real-world complex logic (like game engines or animation systems) that would traditionally be time-consuming for humans to refactor manually.

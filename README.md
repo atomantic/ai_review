@@ -1,16 +1,16 @@
-# Matrix Robot Demo - AI Development Showcase 🤖
+# Buzzphrase Buddy - AI Development Showcase 🤖
 
-An interactive Matrix Robot demo with animated falling characters and tech buzzphrases that showcases AI integration in development workflows through complex animation logic and intentionally problematic code.
+An interactive Matrix Robot demo with animated falling characters and tech buzzphrases that showcases AI integration in development workflows. The Buzzphrase Buddy demonstrates how AI tools can refactor complex animation logic into clean, maintainable code.
 
 ![Matrix Robot Demo](bot.png)
 
 ## What This Demo Does
 
-🤖 **Matrix Robot**: Animated ASCII robot with cyan glow effect in a Matrix-style terminal
+🤖 **Buzzphrase Buddy Robot**: Animated ASCII robot with cyan glow effect in a Matrix-style terminal
 💬 **Tech Buzzphrases**: Robot speaks randomized tech buzzwords every 7 seconds
 🌧️ **Matrix Rain**: Beautiful green falling characters in the background
 🎨 **Speech Bubbles**: Persistent speech bubbles with animated text wrapping
-⚡ **Complex Animations**: Multi-layered rendering with fade effects and timing logic
+⚡ **Clean Code**: Demonstrates how AI tools transform complex animation logic into maintainable code
 
 ## The AI Development Story
 
@@ -18,9 +18,9 @@ Demonstrates how AI tools eliminate the traditional distinction between "warn" a
 
 ## Demo Flow
 
-1. **Fun Matrix Robot Demo**: Run the robot demo to see complex animations and tech buzzphrases
-2. **Show ESLint Errors**: Intentionally complex code triggers numerous linting violations
-3. **AI Auto-Fix**: Use CLI AI tools to refactor complex animation logic into clean, maintainable code
+1. **Fun Buzzphrase Buddy Demo**: Run the robot demo to see animations and tech buzzphrases
+2. **Show ESLint Patterns**: Demonstrate how AI tools handle various code quality issues
+3. **AI Auto-Fix**: Use CLI AI tools to refactor animation logic into clean, maintainable code
 4. **GitHub Integration**: Automated code review and PR creation
 
 ## Key Message
@@ -53,16 +53,16 @@ ai_review/
 ## Demo Script
 
 ### Phase 1: The Fun Demo (2 min)
-- Run `npm run dev` to show the Matrix Robot demo in action
+- Run `npm run dev` to show the Buzzphrase Buddy demo in action
 - Animated robot with cyan glow and Matrix rain background
-- Tech buzzphrases in speech bubbles ("crowd-sourced disintermediate matrices")
-- Press Q to quit, colorful animations, complex timing logic
+- Tech buzzphrases in speech bubbles ("synergizing polymorphic hyperledgers")
+- Press Q to quit, colorful animations, clean animation logic
 
-### Phase 2: The Linting Reality (4 min)
-- Run `npm test` - show dozens of ESLint errors from complex animation code
+### Phase 2: The AI Development Story (4 min)
+- Run `npm test` - show how AI tools handle ESLint patterns
 - Demonstrate `npm run fix:all:q` for AI-powered refactoring
-- Watch AI transform nested loops, extract constants, simplify complexity
-- Compare before/after: spaghetti animation code → clean, modular functions
+- Watch AI transform code complexity, extract constants, improve maintainability
+- Compare before/after: complex animation code → clean, modular functions
 
 ### Phase 3: GitHub Integration (2 min)
 - AI creates PR with refactored animation system
@@ -73,7 +73,7 @@ ai_review/
 
 ```bash
 npm install
-npm run dev              # Launch the Matrix Robot Demo! 🤖
+npm run dev              # Launch the Buzzphrase Buddy Demo! 🤖
 ```
 
 **Controls:**
@@ -82,7 +82,7 @@ npm run dev              # Launch the Matrix Robot Demo! 🤖
 ## AI Development Commands
 
 ```bash
-npm test                 # Show linting errors from complex animation code
+npm test                 # Show ESLint patterns and code quality checks
 npm run fix:all:q        # Use Amazon Q to fix ALL issues and create PR
 npm run fix:all:c        # Use Claude to fix ALL issues and create PR
 npm run fix:err:q        # Fix only errors (not warnings) with Amazon Q

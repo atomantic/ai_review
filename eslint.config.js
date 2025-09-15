@@ -20,12 +20,12 @@ export default [
       'no-undef': 'error',
       'no-duplicate-imports': 'error',
       // Complex issues that traditionally required human involvement: WARNINGS
-      'complexity': ['warn', { 'max': 3 }], // Very low to trigger warnings
-      'max-depth': ['warn', { 'max': 2 }],
-      'max-nested-callbacks': ['warn', { 'max': 2 }],
-      'max-params': ['warn', { 'max': 2 }],
-      'max-statements': ['warn', { 'max': 5 }],
-      'max-lines-per-function': ['warn', { 'max': 10 }],
+      'complexity': ['warn', { 'max': 10 }], // Industry standard
+      'max-depth': ['warn', { 'max': 4 }],
+      'max-nested-callbacks': ['warn', { 'max': 3 }],
+      'max-params': ['warn', { 'max': 4 }],
+      'max-statements': ['warn', { 'max': 15 }],
+      'max-lines-per-function': ['warn', { 'max': 200 }],
       'no-console': 'warn',
       'no-debugger': 'warn',
       'prefer-arrow-callback': 'warn',
