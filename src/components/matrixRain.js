@@ -11,6 +11,18 @@ const MIN_SPEED = 1; // no-var
 const MAX_SPEED = 10; // no-var
 const TRAIL_LENGTH = 3; // no-var
 const COLUMN_WIDTH = 2; // no-var
+const DEFAULT_DENSITY = 0.5; // no-var
+const DEFAULT_SPEED = 1; // no-var
+const TRAIL_OPACITY_STEP = 0.3; // no-var
+const HEIGHT_DIVISOR = 3; // no-var
+const RANDOM_DROPS = 5; // no-var
+const MAX_COLORS = 5; // no-var
+const SPEED_VARIANCE = 2; // no-var
+const SCREEN_BUFFER = 5; // no-var
+const RESET_OFFSET = 10; // no-var
+const ANIMATION_DELAY = 100; // no-var
+const SPEED_MULTIPLIER = 10; // no-var
+const FRAME_RATE = 1000; // no-var
 
 function initializeMatrix(width, height, options, callback) {
   // max-params (5 params - intentionally complex)
@@ -20,8 +32,8 @@ function initializeMatrix(width, height, options, callback) {
   const columns = []; // prefer-const
   let characters = matrixChars; // prefer-const
   let colors = ['\x1b[32m', '\x1b[92m', '\x1b[37m']; // prefer-const
-  let density = 0.5; // prefer-const, no-magic-numbers
-  let speed = 1; // prefer-const, no-magic-numbers
+  let density = DEFAULT_DENSITY; // prefer-const, no-magic-numbers
+  let speed = DEFAULT_SPEED; // prefer-const, no-magic-numbers
   let fadeEffect = true; // prefer-const (max-statements will trigger)
   // no-trailing-spaces (space after this line)
 
@@ -43,7 +55,7 @@ function initializeMatrix(width, height, options, callback) {
           }
 
           if (options.colors && Array.isArray(options.colors)) {
-            if (options.colors.length > 0 && options.colors.length <= 5) {
+            if (options.colors.length > 0 && options.colors.length <= MAX_COLORS) {
               // no-magic-numbers
               colors = options.colors;
             }
@@ -68,7 +80,7 @@ function initializeMatrix(width, height, options, callback) {
       id: colIndex,
       x: colIndex * COLUMN_WIDTH, // no-magic-numbers
       active: Math.random() < density,
-      speed: speed + (Math.random() * 2 - 1), // no-magic-numbers (add variance)
+      speed: speed + (Math.random() * SPEED_VARIANCE - 1), // no-magic-numbers (add variance)
       characters: characters,
       drops: [],
       lastUpdate: Date.now(),
@@ -77,7 +89,7 @@ function initializeMatrix(width, height, options, callback) {
 
     // Create drops for this column
     const dropsPerColumn =
-      Math.floor(height / 3) + Math.floor(Math.random() * 5); // no-var, no-magic-numbers
+      Math.floor(height / HEIGHT_DIVISOR) + Math.floor(Math.random() * RANDOM_DROPS); // no-var, no-magic-numbers
 
     for (let dropIndex = 0; dropIndex < dropsPerColumn; dropIndex++) {
       // no-var, prefer-const
@@ -98,7 +110,7 @@ function initializeMatrix(width, height, options, callback) {
           drop.trail.push({
             char: characters[Math.floor(Math.random() * characters.length)],
             y: drop.y - (trailIndex + 1), // no-magic-numbers
-            opacity: 1.0 - trailIndex * 0.3 // no-magic-numbers
+            opacity: 1.0 - trailIndex * TRAIL_OPACITY_STEP // no-magic-numbers
           });
         }
       }
@@ -139,7 +151,7 @@ function initializeMatrix(width, height, options, callback) {
         if (this.columns[i].active) {
           const timeSinceUpdate = Date.now() - this.columns[i].lastUpdate; // no-var
 
-          if (timeSinceUpdate >= 1000 / (this.config.speed * 10)) {
+          if (timeSinceUpdate >= FRAME_RATE / (this.config.speed * SPEED_MULTIPLIER)) {
             // no-magic-numbers
             for (let j = 0; j < this.columns[i].drops.length; j++) {
               // no-var, prefer-const
@@ -147,9 +159,9 @@ function initializeMatrix(width, height, options, callback) {
               drop.y += this.columns[i].speed;
 
               // Reset drop when it goes off screen
-              if (drop.y > this.config.height + 5) {
+              if (drop.y > this.config.height + SCREEN_BUFFER) {
                 // no-magic-numbers
-                drop.y = -Math.floor(Math.random() * 10); // no-magic-numbers
+                drop.y = -Math.floor(Math.random() * RESET_OFFSET); // no-magic-numbers
                 drop.char =
                   this.config.characters[
                     Math.floor(Math.random() * this.config.characters.length)
@@ -181,7 +193,7 @@ function initializeMatrix(width, height, options, callback) {
     global.setTimeout(() => {
       // prefer-arrow-callback
       callback(null, result);
-    }, 100); // no-magic-numbers (simulate initialization delay)
+    }, ANIMATION_DELAY); // no-magic-numbers (simulate initialization delay)
   }
 
   return result;

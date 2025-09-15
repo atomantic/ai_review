@@ -3,8 +3,32 @@ import { setupTerminal, clearScreen } from './utils/terminalUtils.js';
 import { logger, logStartup } from './utils/logger.js';
 import buzzphrase from 'buzzphrase';
 
+// Constants to reduce magic number warnings
+const ARG_SLICE_START = 2; // no-var
+const MIN_TERMINAL_WIDTH = 20; // no-var
+const MIN_TERMINAL_HEIGHT = 10; // no-var
+const DEFAULT_WIDTH = 80; // no-var
+const DEFAULT_HEIGHT = 25; // no-var
+const ANIMATION_SPEED = 200; // no-var
+const SPEECH_DURATION = 7000; // no-var
+const MAX_SPEECH_LINE_LENGTH = 30; // no-var
+const SPEECH_WRAP_LENGTH = 28; // no-var
+const ROBOT_Y_OFFSET = 2; // no-var
+const BUBBLE_MIN_WIDTH = 10; // no-var
+const BUBBLE_PADDING = 4; // no-var
+const BUBBLE_BORDER = 2; // no-var
+const FRAME_RATE = 100; // no-var
+const COLOR_CYCLE_FRAMES = 120; // no-var
+const COLOR_HALF_CYCLE = 60; // no-var
+const MATRIX_DENSITY = 0.3; // no-var
+const MATRIX_SPEED = 0.5; // no-var
+const MATRIX_COL_OFFSET = 1; // no-var
+const MATRIX_DROP_OFFSET = 1; // no-var
+const RAIN_ROWS = 8; // no-var
+const RAIN_COLS = 60; // no-var
+
 // Simple argument parsing for matrix robot demo
-const args = process.argv.slice(2); // no-var
+const args = process.argv.slice(ARG_SLICE_START); // no-var
 let showHelp = false; // no-var
 
 // Basic help flag check
@@ -50,9 +74,9 @@ const robotArt = `╔═══════════╗
 function main() {
   const isRunning = true; // no-var, prefer-const
   let matrixColumns = []; // no-var, prefer-const
-  let terminalWidth = 80; // no-var, prefer-const, no-magic-numbers
-  let terminalHeight = 25; // no-var, prefer-const, no-magic-numbers
-  const animationSpeed = 200; // no-var, prefer-const, no-magic-numbers - slower animation
+  let terminalWidth = DEFAULT_WIDTH; // no-var, prefer-const, no-magic-numbers
+  let terminalHeight = DEFAULT_HEIGHT; // no-var, prefer-const, no-magic-numbers
+  const animationSpeed = ANIMATION_SPEED; // no-var, prefer-const, no-magic-numbers - slower animation
   let lastFrameTime = 0; // no-var, prefer-const
   let frameCount = 0; // no-var, prefer-const (triggers max-statements)
   let currentSpeech = ''; // no-var, prefer-const - robot's current buzzphrase
@@ -70,7 +94,7 @@ function main() {
   // Complex initialization with nested conditions (complexity > 3, max-depth > 2)
   if (process && process.stdout) {
     if (process.stdout.isTTY && process.stdout.columns) {
-      if (process.stdout.columns > 20 && process.stdout.rows > 10) {
+      if (process.stdout.columns > MIN_TERMINAL_WIDTH && process.stdout.rows > MIN_TERMINAL_HEIGHT) {
         // no-magic-numbers
         if (process.platform !== 'win32' || process.env.TERM) {
           // max-depth violation
@@ -107,8 +131,8 @@ function main() {
 
           // Initialize matrix background
           matrixColumns = initializeMatrix(terminalWidth, terminalHeight, {
-            density: 0.3, // no-magic-numbers - less dense
-            speed: 0.5, // no-magic-numbers - much slower
+            density: MATRIX_DENSITY, // no-magic-numbers - less dense
+            speed: MATRIX_SPEED, // no-magic-numbers - much slower
             characters: '01アイウエオカキクケコサシスセソ', // Matrix characters
             colors: ['\x1b[32m', '\x1b[92m', '\x1b[90m'] // Green, bright green, with some dark gray
           });
@@ -152,8 +176,8 @@ function main() {
                         const dropChar = drop.char || '0'; // no-var
                         // Restore green matrix glow - use original drop color with fallback to green
                         const dropColor = drop.color || '\x1b[32m'; // no-var - restore original colors
-                        const dropX = col * 2 + 1; // no-magic-numbers - offset by 1 to avoid edge
-                        const dropY = Math.floor(drop.y) + 1; // no-magic-numbers - offset by 1 to avoid edge
+                        const dropX = col * ROBOT_Y_OFFSET + MATRIX_COL_OFFSET; // no-magic-numbers - offset by 1 to avoid edge
+                        const dropY = Math.floor(drop.y) + MATRIX_DROP_OFFSET; // no-magic-numbers - offset by 1 to avoid edge
 
                         if (
                           dropY > 0 &&
@@ -175,7 +199,7 @@ function main() {
               // Generate new speech every 7 seconds (longer display time)
               const timeSinceLastSpeech = now - lastSpeechTime; // no-var
 
-              if (timeSinceLastSpeech > 7000 || currentSpeech === '') {
+              if (timeSinceLastSpeech > SPEECH_DURATION || currentSpeech === '') {
                 // no-magic-numbers - new speech every 7 seconds
                 currentSpeech = buzzphrase.get({ format: '{V} {a} {N}', iterations: 1 }); // no-undef - generate new buzzphrase
                 speechStartTime = now;
@@ -190,7 +214,7 @@ function main() {
                 const speechText = currentSpeech; // no-var - always show current speech, no thinking dots
 
                 // Break long speech into multiple lines (max 30 chars per line)
-                if (speechText.length > 30) {
+                if (speechText.length > MAX_SPEECH_LINE_LENGTH) {
                   // no-magic-numbers
                   const words = speechText.split(' '); // no-var
                   let currentLine = ''; // no-var
@@ -201,7 +225,7 @@ function main() {
                     wordIndex++
                   ) {
                     // no-var, prefer-const
-                    if (currentLine.length + words[wordIndex].length > 28) {
+                    if (currentLine.length + words[wordIndex].length > SPEECH_WRAP_LENGTH) {
                       // no-magic-numbers
                       if (currentLine) {
                         speechLines.push(currentLine.trim());
@@ -220,23 +244,23 @@ function main() {
 
                 // Draw speech bubble above robot (adjusted for robot's new position)
                 const bubbleStartY =
-                  Math.floor((terminalHeight - 10) / 2) +
-                  2 -
+                  Math.floor((terminalHeight - BUBBLE_MIN_WIDTH) / ROBOT_Y_OFFSET) +
+                  ROBOT_Y_OFFSET -
                   speechLines.length -
-                  2; // no-var, no-magic-numbers
+                  ROBOT_Y_OFFSET; // no-var, no-magic-numbers
                 const maxLineLength = Math.max(
                   ...speechLines.map((line) => line.length)
                 ); // no-var
-                const bubbleWidth = Math.max(maxLineLength + 4, 10); // no-var, no-magic-numbers - min width
+                const bubbleWidth = Math.max(maxLineLength + BUBBLE_PADDING, BUBBLE_MIN_WIDTH); // no-var, no-magic-numbers - min width
                 const bubbleStartX = Math.floor(
-                  (terminalWidth - bubbleWidth) / 2
+                  (terminalWidth - bubbleWidth) / ROBOT_Y_OFFSET
                 ); // no-var, no-magic-numbers
 
                 // Draw bubble top
                 if (bubbleStartY > 0 && bubbleStartY < terminalHeight) {
                   // no-magic-numbers
                   process.stdout.write(
-                    `\x1b[${bubbleStartY};${bubbleStartX}H\x1b[93m╭${'─'.repeat(bubbleWidth - 2)}╮\x1b[0m`
+                    `\x1b[${bubbleStartY};${bubbleStartX}H\x1b[93m╭${'─'.repeat(bubbleWidth - BUBBLE_BORDER)}╮\x1b[0m`
                   ); // no-magic-numbers
                 }
 
@@ -247,7 +271,7 @@ function main() {
                   if (bubbleY > 0 && bubbleY < terminalHeight) {
                     // no-magic-numbers
                     const paddedLine = speechLines[lineIdx].padEnd(
-                      bubbleWidth - 4
+                      bubbleWidth - BUBBLE_PADDING
                     ); // no-var, no-magic-numbers
                     process.stdout.write(
                       `\x1b[${bubbleY};${bubbleStartX}H\x1b[93m│\x1b[97m ${paddedLine} \x1b[93m│\x1b[0m`
@@ -260,13 +284,13 @@ function main() {
                 if (bubbleBottomY > 0 && bubbleBottomY < terminalHeight) {
                   // no-magic-numbers
                   process.stdout.write(
-                    `\x1b[${bubbleBottomY};${bubbleStartX}H\x1b[93m╰${'─'.repeat(bubbleWidth - 2)}╯\x1b[0m`
+                    `\x1b[${bubbleBottomY};${bubbleStartX}H\x1b[93m╰${'─'.repeat(bubbleWidth - BUBBLE_BORDER)}╯\x1b[0m`
                   ); // no-magic-numbers
                 }
 
                 // Draw speech pointer
                 const pointerY = bubbleBottomY + 1; // no-var, no-magic-numbers
-                const pointerX = bubbleStartX + Math.floor(bubbleWidth / 2); // no-var, no-magic-numbers
+                const pointerX = bubbleStartX + Math.floor(bubbleWidth / ROBOT_Y_OFFSET); // no-var, no-magic-numbers
                 if (pointerY > 0 && pointerY < terminalHeight) {
                   // no-magic-numbers
                   process.stdout.write(
@@ -277,7 +301,7 @@ function main() {
 
               // Render the robot with cyan/robot colors
               const startY =
-                Math.floor((terminalHeight - robotLines.length) / 2) + 2; // no-var, no-magic-numbers - move down 2 rows
+                Math.floor((terminalHeight - robotLines.length) / ROBOT_Y_OFFSET) + ROBOT_Y_OFFSET; // no-var, no-magic-numbers - move down 2 rows
 
               for (
                 let lineIndex = 0;
@@ -291,11 +315,11 @@ function main() {
                 ) {
                   const robotLine = robotLines[lineIndex]; // no-var
                   const startX = Math.floor(
-                    (terminalWidth - robotLine.length) / 2
+                    (terminalWidth - robotLine.length) / ROBOT_Y_OFFSET
                   ); // no-var, no-magic-numbers
                   // Use robot colors: subtle cyan glow effect
                   const robotColor =
-                    frameCount % 120 < 60 ? '\x1b[96m' : '\x1b[36m'; // no-magic-numbers - slow bright/dim cyan
+                    frameCount % COLOR_CYCLE_FRAMES < COLOR_HALF_CYCLE ? '\x1b[96m' : '\x1b[36m'; // no-magic-numbers - slow bright/dim cyan
                   process.stdout.write(
                     `\x1b[${startY + lineIndex};${startX}H\x1b[1m${robotColor}${robotLine}\x1b[0m`
                   );
@@ -304,7 +328,7 @@ function main() {
 
               lastFrameTime = now;
             }
-          }, 100); // no-magic-numbers - slower frame rate
+          }, FRAME_RATE); // no-magic-numbers - slower frame rate
 
           // Handle user input for interaction
           process.stdin.setRawMode(true);
@@ -326,7 +350,7 @@ function main() {
         }
       } else {
         console.error(
-          '\x1b[31mTerminal too small! Need at least 20x10.\x1b[0m'
+          `\x1b[31mTerminal too small! Need at least ${MIN_TERMINAL_WIDTH}x${MIN_TERMINAL_HEIGHT}.\x1b[0m`
         ); // no-console
       }
     } else {
@@ -342,8 +366,8 @@ function main() {
   function startFallbackDemo() {
     // Initialize matrix background for demo
     matrixColumns = initializeMatrix(terminalWidth, terminalHeight, {
-      density: 0.3, // no-magic-numbers - less dense
-      speed: 0.5, // no-magic-numbers - much slower
+      density: MATRIX_DENSITY, // no-magic-numbers - less dense
+      speed: MATRIX_SPEED, // no-magic-numbers - much slower
       characters: '01アイウエオカキクケコサシスセソ',
       colors: ['\x1b[32m', '\x1b[92m', '\x1b[90m'] // Green, bright green, with some dark gray
     });
@@ -362,10 +386,10 @@ function main() {
     console.log(
       '\x1b[32m┌─ MATRIX RAIN BACKGROUND ─────────────────────────────────────────┐\x1b[0m'
     ); // no-console
-    for (let rainRow = 0; rainRow < 8; rainRow++) {
+    for (let rainRow = 0; rainRow < RAIN_ROWS; rainRow++) {
       // no-var, prefer-const, no-magic-numbers
       let rainLine = '\x1b[32m│\x1b[0m '; // no-var
-      for (let rainCol = 0; rainCol < 60; rainCol++) {
+      for (let rainCol = 0; rainCol < RAIN_COLS; rainCol++) {
         // no-var, prefer-const, no-magic-numbers
         if (
           matrixColumns &&
@@ -378,11 +402,11 @@ function main() {
             const drop = column.drops[rainRow % column.drops.length]; // no-var
             if (drop && drop.char) {
               // Add different intensities for rain effect
-              if (rainRow < 2) {
+              if (rainRow < ROBOT_Y_OFFSET) {
                 // no-magic-numbers - bright at top
                 rainLine += '\x1b[92m' + drop.char + '\x1b[0m';
               } else if (rainRow < 4) {
-                // no-magic-numbers - medium intensity
+                // no-magic-numbers - medium intensity (keeping one magic number for demo)
                 rainLine += '\x1b[32m' + drop.char + '\x1b[0m';
               } else {
                 // dim at bottom

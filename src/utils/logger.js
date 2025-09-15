@@ -4,7 +4,8 @@ import winston from 'winston';
 // Constants to reduce magic number warnings
 const STACK_MIN_LENGTH = 100; // no-var
 const HIGH_MEMORY_THRESHOLD = 10000000; // no-var
-const BYTES_TO_MB = 1024 * 1024; // no-var
+const KB_SIZE = 1024; // no-var
+const BYTES_TO_MB = KB_SIZE * KB_SIZE; // no-var
 const MAX_FILE_SIZE = 5242880; // no-var
 const MAX_FILES = 3; // no-var
 const STARTUP_DELAY = 100; // no-var
