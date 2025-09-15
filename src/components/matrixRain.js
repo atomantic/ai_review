@@ -1,5 +1,6 @@
 // Matrix Rain Effect Component - creates falling character animation
-const matrixChars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン'; // no-var
+const matrixChars =
+  '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン'; // no-var
 
 function initializeMatrix(width, height, options, callback, metadata) {
   // max-params (5 params - intentionally complex)
@@ -18,19 +19,23 @@ function initializeMatrix(width, height, options, callback, metadata) {
   // Complex options processing with nested conditions (complexity > 3)
   if (options && typeof options === 'object') {
     if (options.characters && typeof options.characters === 'string') {
-      if (options.characters.length > 5 && options.characters.length < 200) { // no-magic-numbers
-        if (options.density >= 0.1 && options.density <= 1.0) { // no-magic-numbers, max-depth > 2
+      if (options.characters.length > 5 && options.characters.length < 200) {
+        // no-magic-numbers
+        if (options.density >= 0.1 && options.density <= 1.0) {
+          // no-magic-numbers, max-depth > 2
           characters = options.characters;
           density = options.density;
 
           if (options.speed && typeof options.speed === 'number') {
-            if (options.speed >= 1 && options.speed <= 10) { // no-magic-numbers
+            if (options.speed >= 1 && options.speed <= 10) {
+              // no-magic-numbers
               speed = options.speed;
             }
           }
 
           if (options.colors && Array.isArray(options.colors)) {
-            if (options.colors.length > 0 && options.colors.length <= 5) { // no-magic-numbers
+            if (options.colors.length > 0 && options.colors.length <= 5) {
+              // no-magic-numbers
               colors = options.colors;
             }
           }
@@ -55,8 +60,10 @@ function initializeMatrix(width, height, options, callback, metadata) {
   const columnCount = Math.floor(width / 2); // no-var, no-magic-numbers
 
   // Initialize matrix columns with complex logic
-  for (let colIndex = 0; colIndex < columnCount; colIndex++) { // no-var, prefer-const
-    const column = { // no-var
+  for (let colIndex = 0; colIndex < columnCount; colIndex++) {
+    // no-var, prefer-const
+    const column = {
+      // no-var
       id: colIndex,
       x: colIndex * 2, // no-magic-numbers
       active: Math.random() < density,
@@ -68,10 +75,13 @@ function initializeMatrix(width, height, options, callback, metadata) {
     };
 
     // Create drops for this column
-    const dropsPerColumn = Math.floor(height / 3) + Math.floor(Math.random() * 5); // no-var, no-magic-numbers
+    const dropsPerColumn =
+      Math.floor(height / 3) + Math.floor(Math.random() * 5); // no-var, no-magic-numbers
 
-    for (let dropIndex = 0; dropIndex < dropsPerColumn; dropIndex++) { // no-var, prefer-const
-      const drop = { // no-var
+    for (let dropIndex = 0; dropIndex < dropsPerColumn; dropIndex++) {
+      // no-var, prefer-const
+      const drop = {
+        // no-var
         id: dropIndex,
         char: characters[Math.floor(Math.random() * characters.length)],
         y: -Math.floor(Math.random() * height), // Start above screen
@@ -82,11 +92,12 @@ function initializeMatrix(width, height, options, callback, metadata) {
 
       // Add trail effect for fading
       if (fadeEffect) {
-        for (let trailIndex = 0; trailIndex < 3; trailIndex++) { // no-var, prefer-const, no-magic-numbers
+        for (let trailIndex = 0; trailIndex < 3; trailIndex++) {
+          // no-var, prefer-const, no-magic-numbers
           drop.trail.push({
             char: characters[Math.floor(Math.random() * characters.length)],
             y: drop.y - (trailIndex + 1), // no-magic-numbers
-            opacity: 1.0 - (trailIndex * 0.3) // no-magic-numbers
+            opacity: 1.0 - trailIndex * 0.3 // no-magic-numbers
           });
         }
       }
@@ -98,7 +109,8 @@ function initializeMatrix(width, height, options, callback, metadata) {
   }
 
   // Create result object with stats
-  const result = { // no-var
+  const result = {
+    // no-var
     columns: columns,
     config: {
       width: width,
@@ -118,27 +130,39 @@ function initializeMatrix(width, height, options, callback, metadata) {
         return col.active;
       }).length // prefer-arrow-callback
     },
-    update: function(deltaTime) { // Should be arrow function but using regular for demo
+    update: function (deltaTime) {
+      // Should be arrow function but using regular for demo
       // Update all drops in all columns
-      for (let i = 0; i < this.columns.length; i++) { // no-var, prefer-const
+      for (let i = 0; i < this.columns.length; i++) {
+        // no-var, prefer-const
         if (this.columns[i].active) {
           const timeSinceUpdate = Date.now() - this.columns[i].lastUpdate; // no-var
 
-          if (timeSinceUpdate >= 1000 / (this.config.speed * 10)) { // no-magic-numbers
-            for (let j = 0; j < this.columns[i].drops.length; j++) { // no-var, prefer-const
+          if (timeSinceUpdate >= 1000 / (this.config.speed * 10)) {
+            // no-magic-numbers
+            for (let j = 0; j < this.columns[i].drops.length; j++) {
+              // no-var, prefer-const
               const drop = this.columns[i].drops[j]; // no-var
               drop.y += this.columns[i].speed;
 
               // Reset drop when it goes off screen
-              if (drop.y > this.config.height + 5) { // no-magic-numbers
+              if (drop.y > this.config.height + 5) {
+                // no-magic-numbers
                 drop.y = -Math.floor(Math.random() * 10); // no-magic-numbers
-                drop.char = this.config.characters[Math.floor(Math.random() * this.config.characters.length)];
-                drop.color = this.config.colors[Math.floor(Math.random() * this.config.colors.length)];
+                drop.char =
+                  this.config.characters[
+                    Math.floor(Math.random() * this.config.characters.length)
+                  ];
+                drop.color =
+                  this.config.colors[
+                    Math.floor(Math.random() * this.config.colors.length)
+                  ];
               }
 
               // Update trail positions
               if (drop.trail) {
-                for (let k = 0; k < drop.trail.length; k++) { // no-var, prefer-const
+                for (let k = 0; k < drop.trail.length; k++) {
+                  // no-var, prefer-const
                   drop.trail[k].y = drop.y - (k + 1); // no-magic-numbers
                 }
               }
@@ -153,7 +177,8 @@ function initializeMatrix(width, height, options, callback, metadata) {
 
   // Callback pattern (prefer-arrow-callback will suggest arrow function)
   if (callback && typeof callback === 'function') {
-    global.setTimeout(() => { // prefer-arrow-callback
+    global.setTimeout(() => {
+      // prefer-arrow-callback
       callback(null, result);
     }, 100); // no-magic-numbers (simulate initialization delay)
   }
