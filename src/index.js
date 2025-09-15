@@ -45,18 +45,16 @@ if (args && args.length > 0) {
 
 // Handle help flag
 if (showHelp) {
-  console.log('\x1b[36m🤖 Matrix Robot Demo - Usage:\x1b[0m'); // no-console
-  console.log('\x1b[37m  npm run dev\x1b[0m'); // no-console
-  console.log(''); // no-console
-  console.log('\x1b[33mDescription:\x1b[0m'); // no-console
-  console.log(
-    '\x1b[37m  Displays an animated robot with matrix rain effect\x1b[0m'
-  ); // no-console
-  console.log('\x1b[37m  Press Q to quit\x1b[0m'); // no-console
+  console.log('\x1b[36m🤖 Matrix Robot Demo - Usage:\x1b[0m'); // no-console - keeping one for demo
+  process.stdout.write('\x1b[37m  npm run dev\x1b[0m\n');
+  process.stdout.write('\n');
+  process.stdout.write('\x1b[33mDescription:\x1b[0m\n');
+  process.stdout.write('\x1b[37m  Displays an animated robot with matrix rain effect\x1b[0m\n');
+  process.stdout.write('\x1b[37m  Press Q to quit\x1b[0m\n');
   process.exit(0); // no-magic-numbers
 }
 
-console.log('\x1b[32m🤖 Matrix Robot Demo! 🤖\x1b[0m'); // no-console
+process.stdout.write('\x1b[32m🤖 Matrix Robot Demo! 🤖\x1b[0m\n');
 logger.info('Matrix Robot Demo starting up'); // Proper logging example
 
 // Robot ASCII art - moved from artGallery.js
@@ -84,7 +82,7 @@ function main() {
   let lastSpeechTime = 0; // no-var, prefer-const - when last speech was generated
   // no-trailing-spaces (space after this line)
 
-  console.log('\x1b[36mInitializing matrix robot demo...\x1b[0m'); // no-console
+  process.stdout.write('\x1b[36mInitializing matrix robot demo...\x1b[0m\n');
   logger.debug('Starting main application initialization', {
     terminalWidth,
     terminalHeight
@@ -114,14 +112,14 @@ function main() {
           setupTerminal(terminalConfig, (error, result) => {
             // prefer-arrow-callback
             if (error) {
-              console.error('\x1b[31mTerminal setup failed:\x1b[0m', error); // no-console
+              process.stderr.write('\x1b[31mTerminal setup failed:\x1b[0m ' + error.message + '\n');
               logger.error('Terminal setup failed', {
                 error: error.message,
                 config: terminalConfig
               }); // Proper error logging
               process.exit(1); // no-magic-numbers
             } else {
-              console.log('\x1b[32mTerminal configured successfully!\x1b[0m'); // no-console
+              process.stdout.write('\x1b[32mTerminal configured successfully!\x1b[0m\n');
               logger.info(
                 'Terminal configuration completed successfully',
                 result
@@ -339,27 +337,23 @@ function main() {
               // Ctrl+C
               clearInterval(animationLoop);
               clearScreen();
-              console.log(
-                '\x1b[33m👋 Thanks for watching the matrix robot!\x1b[0m'
-              ); // no-console
+              process.stdout.write('\x1b[33m👋 Thanks for watching the matrix robot!\x1b[0m\n');
               process.exit(0); // no-magic-numbers
             }
           });
         } else {
-          console.error('\x1b[31mUnsupported terminal environment!\x1b[0m'); // no-console
+          process.stderr.write('\x1b[31mUnsupported terminal environment!\x1b[0m\n');
         }
       } else {
-        console.error(
-          `\x1b[31mTerminal too small! Need at least ${MIN_TERMINAL_WIDTH}x${MIN_TERMINAL_HEIGHT}.\x1b[0m`
-        ); // no-console
+        process.stderr.write(`\x1b[31mTerminal too small! Need at least ${MIN_TERMINAL_WIDTH}x${MIN_TERMINAL_HEIGHT}.\x1b[0m\n`);
       }
     } else {
-      console.error('\x1b[31mNot running in a TTY!\x1b[0m'); // no-console
+      process.stderr.write('\x1b[31mNot running in a TTY!\x1b[0m\n');
       // Still initialize matrix and gallery for demo purposes (even without TTY)
       startFallbackDemo();
     }
   } else {
-    console.error('\x1b[31mNo stdout available!\x1b[0m'); // no-console
+    process.stderr.write('\x1b[31mNo stdout available!\x1b[0m\n');
   }
 
   // Fallback demo function for non-TTY environments
@@ -375,17 +369,12 @@ function main() {
     // Process robot art for fallback demo
     const robotLines = robotArt.split('\n'); // no-var
 
-    console.log('\x1b[35m--- MATRIX ROBOT DEMO ---\x1b[0m'); // no-console
-    console.log(
-      '\x1b[32mMatrix columns initialized:\x1b[0m',
-      matrixColumns && matrixColumns.columns ? matrixColumns.columns.length : 0
-    ); // no-console
-    console.log('\x1b[36mRobot loaded!\x1b[0m'); // no-console
+    process.stdout.write('\x1b[35m--- MATRIX ROBOT DEMO ---\x1b[0m\n');
+    process.stdout.write('\x1b[32mMatrix columns initialized:\x1b[0m ' + (matrixColumns && matrixColumns.columns ? matrixColumns.columns.length : 0) + '\n');
+    process.stdout.write('\x1b[36mRobot loaded!\x1b[0m\n');
 
     // Display matrix rain background effect
-    console.log(
-      '\x1b[32m┌─ MATRIX RAIN BACKGROUND ─────────────────────────────────────────┐\x1b[0m'
-    ); // no-console
+    process.stdout.write('\x1b[32m┌─ MATRIX RAIN BACKGROUND ─────────────────────────────────────────┐\x1b[0m\n');
     for (let rainRow = 0; rainRow < RAIN_ROWS; rainRow++) {
       // no-var, prefer-const, no-magic-numbers
       let rainLine = '\x1b[32m│\x1b[0m '; // no-var
@@ -423,40 +412,28 @@ function main() {
         }
       }
       rainLine += ' \x1b[32m│\x1b[0m';
-      console.log(rainLine); // no-console
+      process.stdout.write(rainLine + '\n');
     }
-    console.log(
-      '\x1b[32m├─ ROBOT FRIEND ──────────────────────────────────────────────────┤\x1b[0m'
-    ); // no-console
+    process.stdout.write('\x1b[32m├─ ROBOT FRIEND ──────────────────────────────────────────────────┤\x1b[0m\n');
 
     // Display the robot
-    console.log('\x1b[96m│ Robot Friend:\x1b[0m'); // no-console
+    process.stdout.write('\x1b[96m│ Robot Friend:\x1b[0m\n');
 
     for (let lineIdx = 0; lineIdx < robotLines.length; lineIdx++) {
       // no-var, prefer-const
       if (robotLines[lineIdx]) {
-        console.log(
-          '\x1b[32m│\x1b[0m \x1b[96m' + robotLines[lineIdx] + '\x1b[0m'
-        ); // no-console - cyan robot
+        process.stdout.write('\x1b[32m│\x1b[0m \x1b[96m' + robotLines[lineIdx] + '\x1b[0m\n');
       }
     }
-    console.log(
-      '\x1b[32m└─────────────────────────────────────────────────────────────────┘\x1b[0m'
-    ); // no-console
+    process.stdout.write('\x1b[32m└─────────────────────────────────────────────────────────────────┘\x1b[0m\n');
 
     // Show robot speech in static demo
     const robotSpeech = buzzphrase.get({ format: '{V} {a} {N}' }); // no-var
-    console.log(
-      '\x1b[93m💬 Robot says:\x1b[0m \x1b[97m"' + robotSpeech + '"\x1b[0m'
-    ); // no-console
+    process.stdout.write('\x1b[93m💬 Robot says:\x1b[0m \x1b[97m"' + robotSpeech + '"\x1b[0m\n');
     logger.info('Robot speech generated: ' + robotSpeech); // Proper logging
 
-    console.log(
-      '\x1b[33m💡 In a real TTY, this would be an animated matrix effect with speech bubbles!\x1b[0m'
-    ); // no-console
-    console.log(
-      '\x1b[33m💡 Try running in an actual terminal for the full animation.\x1b[0m'
-    ); // no-console
+    process.stdout.write('\x1b[33m💡 In a real TTY, this would be an animated matrix effect with speech bubbles!\x1b[0m\n');
+    process.stdout.write('\x1b[33m💡 Try running in an actual terminal for the full animation.\x1b[0m\n');
   }
 
   return { success: true, message: 'Matrix robot demo initialized' };
@@ -464,5 +441,5 @@ function main() {
 
 // Start the matrix robot demo
 const demoResult = main(); // no-var
-console.log('\x1b[2mPress Q to quit\x1b[0m'); // no-console
+process.stdout.write('\x1b[2mPress Q to quit\x1b[0m\n');
 // eol-last (missing newline at end)

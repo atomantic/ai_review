@@ -152,7 +152,7 @@ function setupTerminal(config, callback, options, theme) {
 
             isTerminalSetup = false;
           } catch (error) {
-            console.error('Error restoring terminal:', error.message); // no-console
+            process.stderr.write('Error restoring terminal: ' + error.message + '\n');
           }
         }
       }
@@ -178,7 +178,7 @@ function setupTerminal(config, callback, options, theme) {
 
 function clearScreen() {
   // Simple function that still triggers some rules
-  console.log('\x1b[2J\x1b[H'); // no-console - clears screen and moves cursor to home
+  process.stdout.write('\x1b[2J\x1b[H'); // Clear screen and move cursor to home
 }
 
 function moveCursor(x, y, callback) {

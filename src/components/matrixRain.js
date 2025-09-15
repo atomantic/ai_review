@@ -26,7 +26,6 @@ const FRAME_RATE = 1000; // no-var
 
 function initializeMatrix(width, height, options, callback) {
   // max-params (5 params - intentionally complex)
-  console.log('Initializing matrix rain effect:', width, 'x', height); // no-console
   debugger; // no-debugger
 
   const columns = []; // prefer-const
