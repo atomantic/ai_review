@@ -1,4 +1,3 @@
-
 console.log('Starting application'); // no-console
 
 function main() {

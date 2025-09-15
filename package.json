@@ -13,6 +13,8 @@
     "fix:all:c": "npm run lint:check 2>&1 | claude --dangerously-skip-permissions -p 'Fix ALL ESLint errors and warnings by modifying the source files. Do not stop until every error detected by npm test is resolved, then create a branch, commit, push and open a PR:'",
     "fix:err:c": "npm run lint:check 2>&1 | claude --dangerously-skip-permissions -p 'Fix ALL ESLint errors by modifying the source files. Do not stop until every error detected by npm test is resolved. Only fix the errors, not the warnings, then create a branch, commit, push and open a PR:'",
     "fix:err:q": "npm run lint:check 2>&1 | q chat --no-interactive --trust-all-tools 'Fix ALL ESLint errors by modifying the source files. Do not stop until every error detected by npm test is resolved. Only fix the errors, not the warnings, then create a branch, commit, push and open a PR:'",
+    "cr:q": "q chat --no-interactive --trust-all-tools 'address the code review feedback for this PR using the gh tool, then commit and push the updates.'",
+    "cr:c": "claude --dangerously-skip-permissions -p 'address the code review feedback for this PR using the gh tool, then commit and push the updates.'",
     "lint": "npm run format && npm run lint:fix"
   },
   "repository": {
