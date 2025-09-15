@@ -1,7 +1,7 @@
 {
   "name": "ai_review",
   "version": "1.0.0",
-  "description": "Demo repository for an 8-minute talk showcasing AI integration in development workflows, focusing on automated linting fixes.",
+  "description": "Demo repository showcasing AI integration in development workflows through a fun Matrix Robot Demo with animated falling characters and complex terminal graphics.",
   "main": "index.js",
   "scripts": {
     "test": "npm run lint:check",
@@ -13,6 +13,8 @@
     "fix:all:c": "npm run lint:check 2>&1 | claude --dangerously-skip-permissions -p 'Fix ALL ESLint errors and warnings by modifying the source files. Do not stop until every error detected by npm test is resolved, then create a branch, commit, push and open a PR:'",
     "fix:err:c": "npm run lint:check 2>&1 | claude --dangerously-skip-permissions -p 'Fix ALL ESLint errors by modifying the source files. Do not stop until every error detected by npm test is resolved. Only fix the errors, not the warnings, then create a branch, commit, push and open a PR:'",
     "fix:err:q": "npm run lint:check 2>&1 | q chat --no-interactive --trust-all-tools 'Fix ALL ESLint errors by modifying the source files. Do not stop until every error detected by npm test is resolved. Only fix the errors, not the warnings, then create a branch, commit, push and open a PR:'",
+    "cr:q": "q chat --no-interactive --trust-all-tools 'address the code review feedback for this PR using the gh tool, then commit and push the updates.'",
+    "cr:c": "claude --dangerously-skip-permissions -p 'address the code review feedback for this PR using the gh tool, then commit and push the updates.'",
     "lint": "npm run format && npm run lint:fix"
   },
   "repository": {
@@ -32,5 +34,9 @@
     "eslint": "^9.34.0",
     "eslint-plugin-complexity": "^1.0.2",
     "prettier": "^3.6.2"
+  },
+  "dependencies": {
+    "buzzphrase": "^3.2.1",
+    "winston": "^3.17.0"
   }
 }
