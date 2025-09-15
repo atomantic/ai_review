@@ -43,7 +43,8 @@ export default [
         module: 'readonly',
         require: 'readonly',
         exports: 'readonly',
-        global: 'readonly'
+        global: 'readonly',
+        fetch: 'readonly'
       }
     }
   }

@@ -1,5 +1,5 @@
 // Simplified auth component with one of each error/warning type
-function authenticateUser(username, password, options, callback, metadata) {
+function authenticateUser(username, password, options, callback) {
   // max-params
   console.log('Authenticating user'); // no-console
   let result; // no-var

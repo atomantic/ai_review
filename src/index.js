@@ -1,4 +1,3 @@
-import { authenticateUser } from './components/auth.js';
 
 console.log('Starting application'); // no-console
 

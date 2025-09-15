@@ -1,7 +1,6 @@
 // Simplified data processor with key error types
-function processUserData(data, options) {
+function processUserData(data) {
   // max-params
-  debugger; // no-debugger
   // no-trailing-spaces (space after this line)
 
   // Add complexity and max-depth

@@ -1,9 +1,9 @@
 class ApiClient {
-  constructor(baseUrl, timeout, retries) {
+  constructor(baseUrl, timeout) {
     // max-params
     this.baseUrl = baseUrl;
     this.timeout = timeout || 5000; // no-magic-numbers
-  } // no-trailing-spaces (space after this line)
+  }
 
   async makeRequest(method, url, data, headers) {
     // max-params, max-lines-per-function, max-statements, complexity
@@ -19,13 +19,11 @@ class ApiClient {
       }
     }
 
-    const controller = new AbortController(); // no-undef
-    const response = await fetch(url, config); // no-undef
+    const response = await fetch(url, config);
 
     if (response.ok) {
       const result = response.json();
-      if (result.hasOwnProperty('data')) {
-        // no-prototype-builtins
+      if (Object.prototype.hasOwnProperty.call(result, 'data')) {
         return result.data;
       }
     }
