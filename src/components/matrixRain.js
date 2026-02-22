@@ -1,201 +1,302 @@
 // Matrix Rain Effect Component - creates falling character animation
 const matrixChars =
-  '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン'; // no-var
+  '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
 
-// Constants to reduce magic number warnings while keeping complexity
-const MIN_CHARS = 5; // no-var
-const MAX_CHARS = 200; // no-var
-const MIN_DENSITY = 0.1; // no-var
-const MAX_DENSITY = 1.0; // no-var
-const MIN_SPEED = 1; // no-var
-const MAX_SPEED = 10; // no-var
-const TRAIL_LENGTH = 3; // no-var
-const COLUMN_WIDTH = 2; // no-var
-const DEFAULT_DENSITY = 0.5; // no-var
-const DEFAULT_SPEED = 1; // no-var
-const TRAIL_OPACITY_STEP = 0.3; // no-var
-const HEIGHT_DIVISOR = 3; // no-var
-const RANDOM_DROPS = 5; // no-var
-const MAX_COLORS = 5; // no-var
-const SPEED_VARIANCE = 2; // no-var
-const SCREEN_BUFFER = 5; // no-var
-const RESET_OFFSET = 10; // no-var
-const ANIMATION_DELAY = 100; // no-var
-const SPEED_MULTIPLIER = 10; // no-var
-const FRAME_RATE = 1000; // no-var
-
-function initializeMatrix(width, height, options, callback) {
-  // max-params (5 params - intentionally complex)
-  debugger; // no-debugger
-
-  const columns = []; // prefer-const
-  let characters = matrixChars; // prefer-const
-  let colors = ['\x1b[32m', '\x1b[92m', '\x1b[37m']; // prefer-const
-  let density = DEFAULT_DENSITY; // prefer-const, no-magic-numbers
-  let speed = DEFAULT_SPEED; // prefer-const, no-magic-numbers
-  let fadeEffect = true; // prefer-const (max-statements will trigger)
-  // no-trailing-spaces (space after this line)
-
-  // Complex options processing with nested conditions (complexity > 3)
-  if (options && typeof options === 'object') {
-    if (options.characters && typeof options.characters === 'string') {
-      if (options.characters.length > MIN_CHARS && options.characters.length < MAX_CHARS) {
-        // no-magic-numbers
-        if (options.density >= MIN_DENSITY && options.density <= MAX_DENSITY) {
-          // no-magic-numbers, max-depth > 2
-          characters = options.characters;
-          density = options.density;
-
-          if (options.speed && typeof options.speed === 'number') {
-            if (options.speed >= MIN_SPEED && options.speed <= MAX_SPEED) {
-              // no-magic-numbers
-              speed = options.speed;
-            }
-          }
-
-          if (options.colors && Array.isArray(options.colors)) {
-            if (options.colors.length > 0 && options.colors.length <= MAX_COLORS) {
-              // no-magic-numbers
-              colors = options.colors;
-            }
-          }
-
-          if (options.fadeEffect !== undefined) {
-            fadeEffect = Boolean(options.fadeEffect);
-          }
-        }
-      }
-    }
+// Configuration constants organized by category
+const CONFIG = {
+  BOUNDS: {
+    MIN_CHARS: 5,
+    MAX_CHARS: 200,
+    MIN_DENSITY: 0.1,
+    MAX_DENSITY: 1.0,
+    MIN_SPEED: 1,
+    MAX_SPEED: 10,
+    MAX_COLORS: 5
+  },
+  ANIMATION: {
+    TRAIL_LENGTH: 3,
+    COLUMN_WIDTH: 2,
+    HEIGHT_DIVISOR: 3,
+    RANDOM_DROPS: 5,
+    SPEED_VARIANCE: 2,
+    SCREEN_BUFFER: 5,
+    RESET_OFFSET: 10,
+    ANIMATION_DELAY: 100,
+    SPEED_MULTIPLIER: 10,
+    FRAME_RATE: 1000,
+    INITIAL_HEIGHT_RANGE: 100
+  },
+  DEFAULTS: {
+    DENSITY: 0.5,
+    SPEED: 1,
+    TRAIL_OPACITY_STEP: 0.3
   }
+};
 
-  // Calculate number of columns based on terminal width
-  const columnCount = Math.floor(width / COLUMN_WIDTH); // no-var, no-magic-numbers
+/**
+ * Validates character string input
+ * @param {string} characters - Character string to validate
+ * @returns {boolean} True if valid
+ */
+const validateCharacters = (characters) => {
+  return characters &&
+    typeof characters === 'string' &&
+    characters.length > CONFIG.BOUNDS.MIN_CHARS &&
+    characters.length < CONFIG.BOUNDS.MAX_CHARS;
+};
 
-  // Initialize matrix columns with complex logic
-  for (let colIndex = 0; colIndex < columnCount; colIndex++) {
-    // no-var, prefer-const
-    const column = {
-      // no-var
-      id: colIndex,
-      x: colIndex * COLUMN_WIDTH, // no-magic-numbers
-      active: Math.random() < density,
-      speed: speed + (Math.random() * SPEED_VARIANCE - 1), // no-magic-numbers (add variance)
-      characters: characters,
-      drops: [],
-      lastUpdate: Date.now(),
-      fadePositions: []
-    };
+/**
+ * Validates density value
+ * @param {number} density - Density value to validate
+ * @returns {boolean} True if valid
+ */
+const validateDensity = (density) => {
+  return density >= CONFIG.BOUNDS.MIN_DENSITY && density <= CONFIG.BOUNDS.MAX_DENSITY;
+};
 
-    // Create drops for this column
-    const dropsPerColumn =
-      Math.floor(height / HEIGHT_DIVISOR) + Math.floor(Math.random() * RANDOM_DROPS); // no-var, no-magic-numbers
+/**
+ * Validates speed value
+ * @param {number} speed - Speed value to validate
+ * @returns {boolean} True if valid
+ */
+const validateSpeed = (speed) => {
+  return speed && typeof speed === 'number' && speed >= CONFIG.BOUNDS.MIN_SPEED && speed <= CONFIG.BOUNDS.MAX_SPEED;
+};
 
-    for (let dropIndex = 0; dropIndex < dropsPerColumn; dropIndex++) {
-      // no-var, prefer-const
-      const drop = {
-        // no-var
-        id: dropIndex,
-        char: characters[Math.floor(Math.random() * characters.length)],
-        y: -Math.floor(Math.random() * height), // Start above screen
-        color: colors[Math.floor(Math.random() * colors.length)],
-        brightness: Math.random(), // For fade effects
-        trail: fadeEffect ? [] : null
-      };
+/**
+ * Validates colors array
+ * @param {Array} colors - Colors array to validate
+ * @returns {boolean} True if valid
+ */
+const validateColors = (colors) => {
+  return Array.isArray(colors) && colors.length > 0 && colors.length <= CONFIG.BOUNDS.MAX_COLORS;
+};
 
-      // Add trail effect for fading
-      if (fadeEffect) {
-        for (let trailIndex = 0; trailIndex < TRAIL_LENGTH; trailIndex++) {
-          // no-var, prefer-const, no-magic-numbers
-          drop.trail.push({
-            char: characters[Math.floor(Math.random() * characters.length)],
-            y: drop.y - (trailIndex + 1), // no-magic-numbers
-            opacity: 1.0 - trailIndex * TRAIL_OPACITY_STEP // no-magic-numbers
-          });
-        }
-      }
-
-      column.drops.push(drop);
-    }
-
-    columns.push(column);
-  }
-
-  // Create result object with stats
-  const result = {
-    // no-var
-    columns: columns,
-    config: {
-      width: width,
-      height: height,
-      density: density,
-      speed: speed,
-      characters: characters,
-      colors: colors,
-      fadeEffect: fadeEffect
-    },
-    stats: {
-      totalColumns: columns.length,
-      totalDrops: columns.reduce((sum, col) => {
-        return sum + col.drops.length;
-      }, 0), // prefer-arrow-callback
-      activeColumns: columns.filter((col) => {
-        return col.active;
-      }).length // prefer-arrow-callback
-    },
-    update: function () {
-      // Should be arrow function but using regular for demo
-      // Update all drops in all columns
-      for (let i = 0; i < this.columns.length; i++) {
-        // no-var, prefer-const
-        if (this.columns[i].active) {
-          const timeSinceUpdate = Date.now() - this.columns[i].lastUpdate; // no-var
-
-          if (timeSinceUpdate >= FRAME_RATE / (this.config.speed * SPEED_MULTIPLIER)) {
-            // no-magic-numbers
-            for (let j = 0; j < this.columns[i].drops.length; j++) {
-              // no-var, prefer-const
-              const drop = this.columns[i].drops[j]; // no-var
-              drop.y += this.columns[i].speed;
-
-              // Reset drop when it goes off screen
-              if (drop.y > this.config.height + SCREEN_BUFFER) {
-                // no-magic-numbers
-                drop.y = -Math.floor(Math.random() * RESET_OFFSET); // no-magic-numbers
-                drop.char =
-                  this.config.characters[
-                    Math.floor(Math.random() * this.config.characters.length)
-                  ];
-                drop.color =
-                  this.config.colors[
-                    Math.floor(Math.random() * this.config.colors.length)
-                  ];
-              }
-
-              // Update trail positions
-              if (drop.trail) {
-                for (let k = 0; k < drop.trail.length; k++) {
-                  // no-var, prefer-const
-                  drop.trail[k].y = drop.y - (k + 1); // no-magic-numbers
-                }
-              }
-            }
-
-            this.columns[i].lastUpdate = Date.now();
-          }
-        }
-      }
-    }
+/**
+ * Parses and validates options with defaults
+ * @param {Object} options - Configuration options
+ * @returns {Object} Validated configuration object
+ */
+const parseOptions = (options) => {
+  const defaults = {
+    characters: matrixChars,
+    colors: ['\x1b[32m', '\x1b[92m', '\x1b[37m'],
+    density: CONFIG.DEFAULTS.DENSITY,
+    speed: CONFIG.DEFAULTS.SPEED,
+    fadeEffect: true
   };
 
-  // Callback pattern (prefer-arrow-callback will suggest arrow function)
-  if (callback && typeof callback === 'function') {
-    global.setTimeout(() => {
-      // prefer-arrow-callback
-      callback(null, result);
-    }, ANIMATION_DELAY); // no-magic-numbers (simulate initialization delay)
+  if (!options || typeof options !== 'object') {
+    return defaults;
+  }
+
+  const result = { ...defaults };
+
+  if (validateCharacters(options.characters) && validateDensity(options.density)) {
+    result.characters = options.characters;
+    result.density = options.density;
+
+    if (validateSpeed(options.speed)) {
+      result.speed = options.speed;
+    }
+
+    if (validateColors(options.colors)) {
+      result.colors = options.colors;
+    }
+
+    if (options.fadeEffect !== undefined) {
+      result.fadeEffect = Boolean(options.fadeEffect);
+    }
   }
 
   return result;
-}
+};
 
-export { initializeMatrix };
+/**
+ * Creates trail effect for a drop
+ * @param {string} characters - Available characters
+ * @param {Object} drop - Drop object
+ * @param {boolean} fadeEffect - Whether to create trail
+ * @returns {Array|null} Trail array or null
+ */
+const createTrail = (characters, drop, fadeEffect) => {
+  if (!fadeEffect) {
+    return null;
+  }
+
+  const trail = [];
+  for (let trailIndex = 0; trailIndex < CONFIG.ANIMATION.TRAIL_LENGTH; trailIndex++) {
+    trail.push({
+      char: characters[Math.floor(Math.random() * characters.length)],
+      y: drop.y - (trailIndex + 1),
+      opacity: 1.0 - trailIndex * CONFIG.DEFAULTS.TRAIL_OPACITY_STEP
+    });
+  }
+  return trail;
+};
+
+/**
+ * Creates a single drop object
+ * @param {number} dropIndex - Drop index
+ * @param {string} characters - Available characters
+ * @param {Array} colors - Available colors
+ * @param {boolean} fadeEffect - Whether to add trail effect
+ * @returns {Object} Drop object
+ */
+const createDrop = (dropIndex, characters, colors, fadeEffect) => {
+  const drop = {
+    id: dropIndex,
+    char: characters[Math.floor(Math.random() * characters.length)],
+    y: -Math.floor(Math.random() * CONFIG.ANIMATION.INITIAL_HEIGHT_RANGE),
+    color: colors[Math.floor(Math.random() * colors.length)],
+    brightness: Math.random(),
+    trail: null
+  };
+
+  drop.trail = createTrail(characters, drop, fadeEffect);
+  return drop;
+};
+
+/**
+ * Creates a matrix column with drops
+ * @param {number} colIndex - Column index
+ * @param {Object} config - Configuration object
+ * @returns {Object} Column object
+ */
+const createColumn = (colIndex, config) => {
+  const column = {
+    id: colIndex,
+    x: colIndex * CONFIG.ANIMATION.COLUMN_WIDTH,
+    active: Math.random() < config.density,
+    speed: config.speed + (Math.random() * CONFIG.ANIMATION.SPEED_VARIANCE - 1),
+    characters: config.characters,
+    drops: [],
+    lastUpdate: Date.now(),
+    fadePositions: []
+  };
+
+  const dropsPerColumn = Math.floor(config.height / CONFIG.ANIMATION.HEIGHT_DIVISOR) + Math.floor(Math.random() * CONFIG.ANIMATION.RANDOM_DROPS);
+
+  for (let dropIndex = 0; dropIndex < dropsPerColumn; dropIndex++) {
+    const drop = createDrop(dropIndex, config.characters, config.colors, config.fadeEffect);
+    column.drops.push(drop);
+  }
+
+  return column;
+};
+
+/**
+ * Resets a drop to the top of the screen
+ * @param {Object} drop - Drop object to reset
+ * @param {Object} config - Configuration object
+ */
+const resetDrop = (drop, config) => {
+  drop.y = -Math.floor(Math.random() * CONFIG.ANIMATION.RESET_OFFSET);
+  drop.char = config.characters[Math.floor(Math.random() * config.characters.length)];
+  drop.color = config.colors[Math.floor(Math.random() * config.colors.length)];
+};
+
+/**
+ * Updates trail positions for a drop
+ * @param {Object} drop - Drop object with trail
+ */
+const updateTrail = (drop) => {
+  if (!drop.trail) {
+    return;
+  }
+
+  drop.trail.forEach((trailPart, k) => {
+    trailPart.y = drop.y - (k + 1);
+  });
+};
+
+/**
+ * Updates a single column's animation
+ * @param {Object} column - Column object to update
+ * @param {Object} config - Configuration object
+ */
+const updateColumn = (column, config) => {
+  const timeSinceUpdate = Date.now() - column.lastUpdate;
+  const shouldUpdate = timeSinceUpdate >= CONFIG.ANIMATION.FRAME_RATE / (config.speed * CONFIG.ANIMATION.SPEED_MULTIPLIER);
+
+  if (!shouldUpdate) {
+    return;
+  }
+
+  column.drops.forEach((drop) => {
+    drop.y += column.speed;
+
+    if (drop.y > config.height + CONFIG.ANIMATION.SCREEN_BUFFER) {
+      resetDrop(drop, config);
+    }
+
+    updateTrail(drop);
+  });
+
+  column.lastUpdate = Date.now();
+};
+
+/**
+ * Creates the matrix result object
+ * @param {Array} columns - Array of column objects
+ * @param {Object} config - Configuration object
+ * @returns {Object} Matrix result object with update method
+ */
+const createMatrixResult = (columns, config) => {
+  return {
+    columns,
+    config,
+    stats: {
+      totalColumns: columns.length,
+      totalDrops: columns.reduce((sum, col) => sum + col.drops.length, 0),
+      activeColumns: columns.filter((col) => col.active).length
+    },
+    update() {
+      this.columns.forEach((column) => {
+        if (column.active) {
+          updateColumn(column, this.config);
+        }
+      });
+    }
+  };
+};
+
+/**
+ * Initializes the matrix rain effect
+ * @param {number} width - Terminal width
+ * @param {number} height - Terminal height
+ * @param {Object} options - Configuration options
+ * @returns {Object} Matrix animation object
+ */
+const initializeMatrix = (width, height, options = {}) => {
+  const config = { ...parseOptions(options), width, height };
+  const columnCount = Math.floor(width / CONFIG.ANIMATION.COLUMN_WIDTH);
+  const columns = [];
+
+  for (let colIndex = 0; colIndex < columnCount; colIndex++) {
+    const column = createColumn(colIndex, config);
+    columns.push(column);
+  }
+
+  return createMatrixResult(columns, config);
+};
+
+/**
+ * Initializes matrix with callback support (async pattern)
+ * @param {number} width - Terminal width
+ * @param {number} height - Terminal height
+ * @param {Object} options - Configuration options
+ * @param {Function} callback - Callback function
+ * @returns {Object} Matrix animation object
+ */
+const initializeMatrixAsync = (width, height, options, callback) => {
+  const result = initializeMatrix(width, height, options);
+
+  if (callback && typeof callback === 'function') {
+    global.setTimeout(() => callback(null, result), CONFIG.ANIMATION.ANIMATION_DELAY);
+  }
+
+  return result;
+};
+
+export { initializeMatrix, initializeMatrixAsync };
