@@ -30,8 +30,8 @@
   },
   "homepage": "https://github.com/atomantic/ai_review#readme",
   "devDependencies": {
-    "@eslint/js": "^9.34.0",
-    "eslint": "^9.34.0",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.5.0",
     "eslint-plugin-complexity": "^1.0.2",
     "prettier": "^3.6.2"
   },
