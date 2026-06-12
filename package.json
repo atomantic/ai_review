@@ -37,6 +37,6 @@
   },
   "dependencies": {
     "buzzphrase": "^3.2.1",
-    "winston": "^3.17.0"
+    "winston": "^3.19.0"
   }
 }
