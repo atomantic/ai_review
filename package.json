@@ -33,7 +33,7 @@
     "@eslint/js": "^10.0.1",
     "eslint": "^10.5.0",
     "eslint-plugin-complexity": "^1.0.2",
-    "prettier": "^3.8.4"
+    "prettier": "^3.9.1"
   },
   "dependencies": {
     "buzzphrase": "^3.2.1",
